@@ -1,42 +1,40 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mhaziza <mhaziza@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/03/15 15:57:23 by mhaziza           #+#    #+#              #
-#    Updated: 2017/03/31 11:04:30 by mhaziza          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
-NAME	=	compile
-CC		=   gcc
-CFLAGS	= 	-Wall -Wextra -Werror -I.
-RM		=   rm -f
-LIBFT	=	 -L./libft -lft
+RICALL	=	ricall
+CC	=	gcc
+CFLAGS	=	-Wall -Wextra
+RM	=	rm -f
+MKDIR	=	mkdir -p
+LIBS	=	-L/usr/local/lib -lportaudio
+HEAD	=	./include
+MODEL 	=	-DMODELDIR=\"`pkg-config --variable=modeldir pocketsphinx`\" 
+S_INC	=	-I/usr/local/include -I/usr/local/include/sphinxbase  -I/usr/local/include/pocketsphinx  
+S_LIB	=	-L/usr/local/lib -lpocketsphinx -lsphinxbase -lsphinxad
+SRCS    = 	hello_ps.c
 
-LIBFT_PATH	= ./libft
-VM_PATH	= ./VM
-ASM_PATH	= ./asm_dir
+OBJS	=	$(SRCS:.c=.o)
+VPATH	=	src/:
 
-all:	$(NAME)
+all:	$(RICALL)
 
-$(NAME):
-	@make -C $(LIBFT_PATH)
-	@make -C $(VM_PATH)
-	@make -C $(ASM_PATH)
+# Executables
+$(RICALL): $(OBJS)
+	$(CC) -o $@ $^ $(SPINX) $(S_INC) $(S_LIB)
+	echo "Compiling [$@]"
 
+# Object files
+$(OBJS): $(SRCS)
+	$(CC) -c $^ $(SPHINX) $(MODEL) $(S_INC) 
+	echo "Creating object files"
+
+# Cleaning rules
 clean:
-	@make -C $(LIBFT_PATH) clean
-	@make -C $(VM_PATH) clean
-	@make -C $(ASM_PATH) clean
+	rm -f $(OBJS)
+	echo "Cleaning [$(OBJS)]"
 
-fclean:	clean
-	@make -C $(LIBFT_PATH) fclean
-	@make -C $(VM_PATH) fclean
-	@make -C $(ASM_PATH) fclean
+fclean:
+	rm -f $(OBJS)
+	rm -rf $(RICALL)
+	echo "Cleaning ricall"
 
-re:		fclean all
-
-.PHONY:		all clean fclean re
+re: fclean all
+.PHONY: clean fclean re libft all
