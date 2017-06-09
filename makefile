@@ -9,7 +9,7 @@ HEAD	=	./include
 MODEL 	=	-DMODELDIR=\"`pkg-config --variable=modeldir pocketsphinx`\" 
 S_INC	=	-I/usr/local/include -I/usr/local/include/sphinxbase  -I/usr/local/include/pocketsphinx  
 S_LIB	=	-L/usr/local/lib -lpocketsphinx -lsphinxbase -lsphinxad -lportaudio
-SRCS    = 	paex_record.c
+SRCS    = 	mic_record.c
 
 OBJS	=	$(SRCS:.c=.o)
 VPATH	=	src/:
