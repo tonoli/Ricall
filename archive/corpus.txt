@@ -1,7 +1,0 @@
-open browser
-new e-mail
-forward
-backward
-next window
-last window
-open music player

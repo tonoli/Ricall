@@ -15,13 +15,23 @@ main(int argc, char *argv[])
                  "-hmm", MODELDIR "/en-us/en-us",
                  "-lm", MODELDIR "/en-us/en-us.lm.bin",
                  "-dict", MODELDIR "/en-us/cmudict-en-us.dict",
-                 "-logfn", "/dev/null",   
                  NULL);
+    if (config == NULL) {
+        fprintf(stderr, "Failed to create config object, see log for  details\n");
+        return -1;
+    }
     
     ps = ps_init(config);
+    if (ps == NULL) {
+        fprintf(stderr, "Failed to create recognizer, see log for  details\n");
+        return -1;
+    }
 
-    fh = fopen("SF.wav", "rb");
- 
+    fh = fopen("goforward.raw", "rb");
+    if (fh == NULL) {
+        fprintf(stderr, "Unable to open input file goforward.raw\n");
+        return -1;
+    }
 
     rv = ps_start_utt(ps);
     
@@ -33,7 +43,7 @@ main(int argc, char *argv[])
     
     rv = ps_end_utt(ps);
     hyp = ps_get_hyp(ps, &score);
-    printf("Recognized: %s\n Score: %d", hyp, score);
+    printf("Recognized: %s\n", hyp);
 
     fclose(fh);
     ps_free(ps);
